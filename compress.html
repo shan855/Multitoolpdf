@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress PDF Tools | MultiTool</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+    /* ===== COMPACT CARDS - HOME PAGE SIZE ===== */
+    .compress-tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .compress-tool-card {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        padding: 25px;
+        box-shadow: 0 10px 30px var(--shadow-color);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid transparent;
+        cursor: pointer;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    /* GENTLE PULSE WHEN NOT HOVERED */
+    .compress-tool-card:not(:hover) {
+        animation: gentlePulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes gentlePulse {
+        0%, 100% { 
+            box-shadow: 0 10px 30px rgba(249, 65, 68, 0.1);
+            transform: translateY(0);
+        }
+        50% { 
+            box-shadow: 0 15px 40px rgba(249, 65, 68, 0.15);
+            transform: translateY(-3px);
+        }
+    }
+    
+    /* HOVER EFFECTS */
+    .compress-tool-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: #f94144;
+        box-shadow: 0 25px 50px rgba(249, 65, 68, 0.2);
+    }
+    
+    /* Card shine effect on hover */
+    .compress-tool-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.7s ease;
+    }
+    
+    .compress-tool-card:hover::before {
+        left: 100%;
+    }
+    
+    /* ===== ICONS ===== */
+    .compress-tool-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(135deg, #f94144, #f3722c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.3rem;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(249, 65, 68, 0.3);
+    }
+    
+    .compress-tool-card:hover .compress-tool-icon {
+        animation: iconGlow 2s ease infinite;
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    @keyframes iconGlow {
+        0%, 100% {
+            background-position: 0% 50%;
+            box-shadow: 0 0 20px rgba(249, 65, 68, 0.5);
+        }
+        50% {
+            background-position: 100% 50%;
+            box-shadow: 0 0 30px rgba(249, 65, 68, 0.8);
+        }
+    }
+    
+    /* ===== CARD CONTENT ===== */
+    .compress-tool-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        color: var(--text-primary);
+    }
+    
+    .compress-tool-card p {
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+        line-height: 1.6;
+        flex-grow: 1;
+        font-size: 0.95rem;
+    }
+    
+    .compress-tool-features {
+        text-align: left;
+        margin: 15px 0;
+        padding: 0;
+    }
+    
+    .compress-tool-features li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 0;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    
+    .compress-tool-features li i {
+        color: var(--success-color);
+        font-size: 0.8rem;
+    }
+    
+    /* ===== BUTTONS ===== */
+    .btn-select-tool {
+        background: linear-gradient(135deg, #f94144, #f3722c);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: var(--radius-md);
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 14px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-select-tool::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -60%;
+        width: 20%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(30deg);
+        transition: left 0.7s ease;
+    }
+    
+    .btn-select-tool:hover::after {
+        left: 120%;
+    }
+    
+    .btn-select-tool:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(249, 65, 68, 0.4);
+    }
+    
+    /* ===== HEADER ===== */
+    .compress-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .compress-header h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #f94144, #f3722c, #f8961e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .compress-header p {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    
+    /* ===== FLOATING ICONS ANIMATION ===== */
+    .floating-icons {
+        position: relative;
+        width: 300px;
+        height: 150px;
+        margin: 0 auto;
+    }
+    
+    .floating-icons i {
+        position: absolute;
+        font-size: 2.5rem;
+        opacity: 0.9;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    /* Tool Icons */
+    .floating-icons i:nth-child(1) { 
+        top: 20px; left: 30px; animation-delay: 0s; 
+        color: #f94144;
+    }
+    .floating-icons i:nth-child(2) { 
+        top: 10px; right: 40px; animation-delay: 1s; 
+        color: #f3722c;
+    }
+    
+    /* Random PDF Icons */
+    .floating-icons i:nth-child(3) { 
+        bottom: 20px; left: 80px; animation-delay: 2s; 
+        color: #f8961e;
+    }
+    .floating-icons i:nth-child(4) { 
+        bottom: 10px; right: 30px; animation-delay: 3s; 
+        color: #4361ee;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    /* ===== BACK BUTTON ===== */
+    .btn-back {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .btn-back:hover {
+        border-color: #f94144;
+        color: #f94144;
+        transform: translateX(-5px);
+    }
+    
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .compress-tools-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 100%;
+        }
+        
+        .compress-tool-card {
+            padding: 20px;
+        }
+        
+        .compress-header h1 {
+            font-size: 1.8rem;
+        }
+        
+        .floating-icons {
+            width: 250px;
+            height: 120px;
+        }
+        
+        .floating-icons i {
+            font-size: 2rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .compress-tools-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    /* ===== TOOL INTERFACE ===== */
+    #tool-interface {
+        margin-top: 50px;
+        display: none;
+    }
+    
+    .tool-container {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        box-shadow: 0 20px 60px var(--shadow-color);
+        animation: fadeInUp 0.5s ease;
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Compression Options */
+    .compression-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin: 30px 0;
+    }
+    
+    .compression-option {
+        background: var(--bg-primary);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        text-align: center;
+        border: 2px solid var(--border-color);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .compression-option:hover {
+        border-color: #f94144;
+        transform: translateY(-5px);
+    }
+    
+    .compression-option i {
+        font-size: 2rem;
+        color: #f94144;
+        margin-bottom: 10px;
+    }
+    
+    .compression-option h4 {
+        margin-bottom: 10px;
+    }
+    
+    .compression-option.active {
+        border-color: #f94144;
+        background: linear-gradient(135deg, rgba(249, 65, 68, 0.1), rgba(243, 114, 44, 0.1));
+    }
+    
+    @media (max-width: 768px) {
+        .compression-options {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+</head>
+<body class="compress-page">
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-tools"></i>
+                    <span>MultiTool</span>
+                </a>
+                
+                <div class="nav-menu" id="navMenu">
+                    <ul class="nav-list">
+                        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="nav-link active"><i class="fas fa-toolbox"></i> Tools <i class="fas fa-chevron-down"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="merge.html">Merge PDF</a>
+                                <a href="edit-sign.html">Edit & Sign</a>
+                                <a href="compress.html" class="active">Compress PDF</a>
+                                <a href="split.html">Split PDF</a>
+                            </div>
+                        </li>
+                        <li><a href="../about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="../contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Compress PDF Tools Page -->
+    <main class="tool-page">
+        <div class="container">
+            <div class="compress-header">
+                <button class="btn-back" onclick="window.location.href='../index.html'">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </button>
+                <h1><i class="fas fa-compress-alt"></i> Compress PDF Tools</h1>
+                <p>Reduce PDF file size while maintaining quality - 100% client-side compression</p>
+                
+                <!-- Floating Icons Animation -->
+                <div class="floating-icons">
+                    <!-- 2 Tool Icons -->
+                    <i class="fas fa-compress-alt"></i>
+                    <i class="fas fa-file-archive"></i>
+                    
+                    <!-- 2 Random PDF Icons -->
+                    <i class="fas fa-file-pdf"></i>
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+            </div>
+            
+            <!-- Compact Tools Grid - Only 2 Cards -->
+            <div class="compress-tools-grid">
+                <!-- Tool 1: Smart Compress -->
+                <div class="compress-tool-card" onclick="openTool('smart-compress')">
+                    <div class="compress-tool-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Smart Compress</h3>
+                    <p>Intelligent compression that balances file size and quality automatically</p>
+                    
+                    <ul class="compress-tool-features">
+                        <li><i class="fas fa-check"></i> Auto-optimize images</li>
+                        <li><i class="fas fa-check"></i> Remove redundant data</li>
+                        <li><i class="fas fa-check"></i> Maintain visual quality</li>
+                        <li><i class="fas fa-check"></i> Best for documents</li>
+                    </ul>
+                    
+                    <button class="btn-select-tool">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+                
+                <!-- Tool 2: Advanced Compress -->
+                <div class="compress-tool-card" onclick="openTool('advanced-compress')">
+                    <div class="compress-tool-icon" style="background: linear-gradient(135deg, #f8961e, #f9c74f);">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Advanced Compress</h3>
+                    <p>Manual control over compression settings and output quality</p>
+                    
+                    <ul class="compress-tool-features">
+                        <li><i class="fas fa-check"></i> Custom compression ratio</li>
+                        <li><i class="fas fa-check"></i> Image DPI control</li>
+                        <li><i class="fas fa-check"></i> Remove metadata</li>
+                        <li><i class="fas fa-check"></i> Target file size</li>
+                    </ul>
+                    
+                    <button class="btn-select-tool">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tool Interface Area -->
+            <div id="tool-interface">
+                <div class="tool-container" id="tool-container">
+                    <!-- Tool interface will load here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 MultiTool. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> for the open web community</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    
+    <script>
+    // Tool Navigation
+    function openTool(toolId) {
+        const toolInterface = document.getElementById('tool-interface');
+        const toolContainer = document.getElementById('tool-container');
+        
+        // Hide tool interface if already visible (for fresh click)
+        toolInterface.style.display = 'none';
+        
+        // Clear container
+        toolContainer.innerHTML = '';
+        
+        // Show selected tool interface
+        if (toolId === 'smart-compress') {
+            toolContainer.innerHTML = `
+                <h2 style="text-align: center; margin-bottom: 30px;">
+                    <i class="fas fa-magic" style="color: #f94144;"></i> Smart Compress Tool
+                </h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 30px;">
+                    Upload PDF and let AI optimize it automatically
+                </p>
+                
+                <!-- Upload Area -->
+                <div style="text-align: center; padding: 40px; border: 2px dashed var(--border-color); border-radius: var(--radius-lg); margin: 20px 0;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #f94144; margin-bottom: 20px;"></i>
+                    <h3>Upload PDF to Compress</h3>
+                    <p style="margin-bottom: 10px;">Drag and drop PDF file here or click to browse</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+                        <i class="fas fa-lock"></i> 100% secure · No upload · Client-side
+                    </p>
+                    <button class="btn-select-tool" onclick="alert('File upload would open here')">
+                        <i class="fas fa-folder-open"></i> Select PDF File
+                    </button>
+                </div>
+                
+                <!-- Smart Features -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 30px 0;">
+                    <div style="text-align: center; padding: 15px; background: var(--bg-primary); border-radius: var(--radius-md);">
+                        <i class="fas fa-bolt" style="color: #f94144; font-size: 1.5rem; margin-bottom: 10px;"></i>
+                        <h4>Lightning Fast</h4>
+                        <p style="font-size: 0.9rem;">Process in seconds</p>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: var(--bg-primary); border-radius: var(--radius-md);">
+                        <i class="fas fa-chart-line" style="color: #f3722c; font-size: 1.5rem; margin-bottom: 10px;"></i>
+                        <h4>90% Reduction</h4>
+                        <p style="font-size: 0.9rem;">Average compression</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-select-tool" style="background: linear-gradient(135deg, #f94144, #f3722c);" onclick="alert('Processing would start here')">
+                        <i class="fas fa-play-circle"></i> Start Smart Compression
+                    </button>
+                    <button class="btn-back" onclick="closeTool()" style="margin-left: 15px;">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            `;
+        }
+        else if (toolId === 'advanced-compress') {
+            toolContainer.innerHTML = `
+                <h2 style="text-align: center; margin-bottom: 30px;">
+                    <i class="fas fa-sliders-h" style="color: #f8961e;"></i> Advanced Compress Tool
+                </h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 30px;">
+                    Manual control over compression settings
+                </p>
+                
+                <!-- Upload Area -->
+                <div style="text-align: center; padding: 40px; border: 2px dashed var(--border-color); border-radius: var(--radius-lg); margin: 20px 0;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #f8961e; margin-bottom: 20px;"></i>
+                    <h3>Upload PDF to Compress</h3>
+                    <p style="margin-bottom: 20px;">Drag and drop PDF file here or click to browse</p>
+                    <button class="btn-select-tool" style="background: linear-gradient(135deg, #f8961e, #f9c74f);" onclick="alert('File upload would open here')">
+                        <i class="fas fa-folder-open"></i> Select PDF File
+                    </button>
+                </div>
+                
+                <!-- Compression Options -->
+                <div style="margin: 30px 0;">
+                    <h4 style="margin-bottom: 20px;">Compression Level</h4>
+                    <div class="compression-options">
+                        <div class="compression-option" onclick="selectOption(this)">
+                            <i class="fas fa-file"></i>
+                            <h4>Low</h4>
+                            <p style="font-size: 0.8rem;">Max quality, ~30% smaller</p>
+                        </div>
+                        <div class="compression-option" onclick="selectOption(this)">
+                            <i class="fas fa-file-archive"></i>
+                            <h4>Medium</h4>
+                            <p style="font-size: 0.8rem;">Balanced, ~50% smaller</p>
+                        </div>
+                        <div class="compression-option" onclick="selectOption(this)">
+                            <i class="fas fa-compress"></i>
+                            <h4>High</h4>
+                            <p style="font-size: 0.8rem;">Max compression, ~80% smaller</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Options -->
+                <div style="margin: 30px 0; padding: 20px; background: var(--bg-primary); border-radius: var(--radius-lg);">
+                    <h4 style="margin-bottom: 15px;">Additional Options</h4>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <input type="checkbox" id="removeMeta">
+                        <label for="removeMeta">Remove metadata (author, date, etc.)</label>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="flatten">
+                        <label for="flatten">Flatten form fields</label>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-select-tool" style="background: linear-gradient(135deg, #f8961e, #f9c74f);" onclick="alert('Processing would start here')">
+                        <i class="fas fa-play-circle"></i> Start Advanced Compression
+                    </button>
+                    <button class="btn-back" onclick="closeTool()" style="margin-left: 15px;">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Show interface and scroll to it
+        toolInterface.style.display = 'block';
+        setTimeout(() => {
+            toolInterface.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+    
+    function selectOption(element) {
+        // Remove active class from all options
+        document.querySelectorAll('.compression-option').forEach(opt => {
+            opt.classList.remove('active');
+        });
+        // Add active class to clicked option
+        element.classList.add('active');
+    }
+    
+    function closeTool() {
+        document.getElementById('tool-interface').style.display = 'none';
+        document.getElementById('tool-container').innerHTML = '';
+    }
+    
+    // Theme handling
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add compress-page class to body
+        document.body.classList.add('compress-page');
+        
+        // Hide tool interface initially
+        document.getElementById('tool-interface').style.display = 'none';
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+        }
+        
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    });
+    </script>
+</body>
+</html>
