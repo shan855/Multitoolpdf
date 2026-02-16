@@ -2532,3 +2532,71 @@ button {
         transform: translateY(0);
     }
 }
+
+
+/* ===== MOBILE RESPONSIVE FIX ===== */
+@media screen and (max-width: 768px) {
+    /* Container fix */
+    .container, 
+    .tools-grid,
+    .features-section,
+    .hero-section,
+    .footer {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+    
+    /* Heading fix */
+    h1 {
+        font-size: 28px !important;
+        line-height: 1.2 !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    
+    h2 {
+        font-size: 22px !important;
+    }
+    
+    /* Text fix */
+    p, .description, .tool-description {
+        font-size: 16px !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    /* Tools grid - 1 column */
+    .tools-grid,
+    .tools-list,
+    .row {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+    
+    /* Tool cards */
+    .tool-card,
+    .card,
+    .tool-item {
+        width: 100% !important;
+        margin: 0 0 15px 0 !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Buttons */
+    .btn, 
+    button,
+    .tool-button,
+    .start-button {
+        width: 100% !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        padding: 12px !important;
+    }
+}
